@@ -1,23 +1,45 @@
-# Animal Crossing - Wave Function Collapse
+# Animal Crossing Scene Generator
 
-[Animal Crossing Scene Generator Website](https://kiara-v.github.io/animal-crossing/)
+**[Live Demo →](https://kiara-vong.github.io/animal-crossing/)**
 
-## Overview
+A procedural 3D scene generator that builds an *Animal Crossing*-inspired island, tile by tile, using the **Wave Function Collapse** algorithm — the same class of technique used in games like *Bad North* and *Caves of Qud* to generate coherent worlds from a small set of hand-modeled pieces.
 
-Welcome to the Animal Crossing Scene Generator, a project that combines the charm of Animal Crossing with the power of procedural generation. This project is an exploration of the Wave Function Collapse algorithm to create delightful 2D and 3D scenes inspired by the beloved Animal Crossing game. The scene generator allows you to create your very own virtual paradise where you can relax, explore, and get creative.
+![Generated scene](screenshots/scene.png)
 
-## Features
+## Why this project
 
-- **Procedural Generation:** Using the innovative Wave Function Collapse algorithm, our project generates unique and diverse scenes with every click. No two scenes will ever be the same, ensuring a constant sense of surprise and exploration.
+This started as an exploration of procedural generation and constraint-solving algorithms, and turned into a full pipeline: modeling tiles in Blender, exporting them as glTF, and writing a constraint solver from scratch in JavaScript to assemble them into a scene that always looks intentional rather than random.
 
-- **Interactive Scene Rotation:** Immerse yourself in your generated scene by rotating it using your mouse. This feature adds an extra layer of interactivity and allows you to view your scene from different angles.
+## How it works
 
-- **Custom Tile Placement:** Tailor your scene to your liking by choosing specific tiles to place on the grid. This hands-on approach lets you create a scene that's truly your own.
+- The island is a grid of **triangular tiles** rather than squares — this cuts down the number of unique pieces needed to tile a surface seamlessly, at the cost of a trickier coordinate system (each tile has 3 possible rotations, not 4).
+- Each tile type declares which of its three edges can legally border which edges on neighboring tiles (**adjacency constraints**) — a coastline edge, for example, can only border another coastline edge or open water, never a cliff face.
+- The generator repeatedly picks the **cell with the fewest remaining valid options** first ("lowest entropy" — collapsing the most-constrained cells early avoids painting the algorithm into a contradiction later), locks in one of its options at random, then propagates that constraint outward to its neighbors, narrowing their options in turn.
+- Clicking any tile forces a specific type at that position and re-propagates from there — generation isn't purely automatic, it's steerable.
 
-- **Animal Crossing Theme:** We've drawn inspiration from Animal Crossing, a beloved life simulation video game, to infuse a cozy, charming atmosphere into your procedurally generated scenes. Whether you want to recreate the vibe of your favorite Animal Crossing village or craft a whole new world, our project has you covered.
+## Controls
 
-- **Triangular Tiles:** Our project employs triangular tiles, a clever approach that minimizes the number of unique tiles you need to create. This not only simplifies the process but also gives a unique aesthetic to your scenes.
+| Key / Action | Effect |
+|---|---|
+| `space` | Generate the next tile |
+| `click` | Place a specific tile at that position |
+| `r` | Reset the board |
+| `a` | Toggle camera auto-rotate |
 
-- **Adjacency Constraints:** We've meticulously defined adjacency constraints for our set of tiles. These constraints ensure that tiles connect harmoniously, creating a visually pleasing and coherent scene. You'll find various ways to implement these constraints, such as manual configuration, color matching, boundary profiles, and more.
+## Tech stack
 
-- **Least Entropy Heuristic:** To drive the procedural generation, we've implemented the least entropy heuristic. This means that the algorithm intelligently decides which block to collapse at each step, resulting in more interesting and diverse scenes.
+- **React** + **react-three-fiber** (a React renderer for Three.js — lets the scene graph be declarative JSX instead of imperative Three.js calls)
+- **@react-three/drei** for camera controls, environment lighting, and glTF loading/preloading
+- **Three.js** for the underlying WebGL rendering
+- **Blender**, for modeling and exporting the tile set as `.glb`
+- Custom **GLSL** vertex shaders for procedural coloring on rocks and foliage
+- Create React App (via `react-app-rewired`, for shader-file webpack config)
+
+## Run it locally
+
+```bash
+npm install
+npm start        # dev server at localhost:3000
+npm run build    # production build
+npm run deploy   # publish build/ to the gh-pages branch
+```
