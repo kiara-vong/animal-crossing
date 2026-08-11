@@ -30,3 +30,34 @@ Canvas {
   font-family: inherit;
   text-align: center;
 }
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: #cdd6dd;
+}
+
+.loading-spinner {
+  width: 42px;
+  height: 42px;
+  border: 4px solid rgba(0, 0, 0, 0.15);
+  border-top-color: #556;
+  border-radius: 50%;
+  animation: loading-spin 0.6s linear infinite;
+}
+
+.loading-label {
+  font-family: sans-serif;
+  font-size: 14px;
+  color: #445;
+}
+
+@keyframes loading-spin {
+  to { transform: rotate(360deg); }
+}

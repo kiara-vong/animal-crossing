@@ -1,7 +1,18 @@
-html, body { height: 100% }
+html, body { height: 100%; overflow: hidden }
 
 body {
   margin: 0;
+  /* The Canvas is sized to 100%/100% of a 100%-height chain (html, body,
+     #root); if anything ever nudges its content a fraction of a pixel
+     taller than the viewport, the page's default white background shows
+     through as a sliver along whichever edge overflows — most visibly a
+     thin bar bottom-right, where vertical and horizontal overflow would
+     both land. overflow: hidden above means that can only ever be an
+     invisible 1px clip instead of a visible gap; this background is a
+     second fallback so any moment where it isn't fully clipped reads as
+     part of the sky instead of a stray white line.
+  */
+  background: #cdd6dd;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;

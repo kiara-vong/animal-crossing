@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef, Suspense } from 'react'
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 
 import { Canvas, useThree } from '@react-three/fiber'
-import { Sky, Environment, OrbitControls } from "@react-three/drei";
+import { Sky, Environment, OrbitControls, useProgress } from "@react-three/drei";
 
 import './App.css';
 
@@ -28,6 +28,24 @@ function intersection(a,b) {
   const r = [];
   a.forEach( v => b.indexOf(v) !== -1 && r.push(v) );
   return r;
+}
+
+// useProgress tracks THREE.DefaultLoadingManager, which every useGLTF/
+// Environment/texture load in the scene reports through — so this covers
+// everything, not just one component's own assets. Rendered as a plain DOM
+// overlay (a sibling of <Canvas>, not inside it), so it can show up before
+// WebGL has drawn a single frame.
+function LoadingScreen() {
+  const { active, progress } = useProgress();
+
+  if (!active) return null;
+
+  return (
+	<div className="loading-screen">
+	  <div className="loading-spinner" />
+	  <div className="loading-label">Generating world&hellip; {Math.round(progress)}%</div>
+	</div>
+  );
 }
 
 const Tile = props => {
@@ -305,6 +323,7 @@ function App({ props }) {
 
   return (
 	<>
+	  <LoadingScreen />
 	  <div className="controls-help">
 		<div><kbd>space</kbd> new tile</div>
 		<div><kbd>click</kbd> place tile</div>
@@ -312,11 +331,18 @@ function App({ props }) {
 		<div><kbd>a</kbd> auto-rotate</div>
 	  </div>
 	  <Canvas camera={{ fov: 45, position: [5, 5, 5] }}>
+		<OrbitControls autoRotate={autoRotate}/>
+		<directionalLight args={[0x0, 1.0]} castShadow position={[1,.6,0]}/>
+		<ambientLight args={[2]}/>
+		{/* Environment fetches its HDRI lighting map from a remote CDN — kept
+		    in its own Suspense so that fetch (the slowest thing in the whole
+		    scene) doesn't hold up Sky/Clouds/Grid, which only need local,
+		    already-bundled assets and would otherwise render nothing at all
+		    until the remote request finished. */}
 		<Suspense fallback={null}>
-		  <OrbitControls autoRotate={autoRotate}/>
-		  <directionalLight args={[0x0, 1.0]} castShadow position={[1,.6,0]}/>
-		  <ambientLight args={[2]}/>
 		  <Environment preset="sunset" />
+		</Suspense>
+		<Suspense fallback={null}>
 		  <Sky distance={450000} sunPosition={[1, .02, 0]} inclination={.1} azimuth={0.25}  />
 		  <Clouds position={[0,2.5,0]}/>
 		  <Grid position={[0,0,0]} rules={tv3} iteration={iteration} cells={cells} parameters={parametersRef.current}/>
