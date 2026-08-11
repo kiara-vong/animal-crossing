@@ -41,11 +41,9 @@ export default function Tile(props) {
 
   const fn = t => t === undefined ? 'empty' : 'tile'+t;
 
-  const { nodes } = useGLTF(`assets/${fn(props.t)}.glb`)
+  const { nodes } = useGLTF(`${process.env.PUBLIC_URL}/assets/${fn(props.t)}.glb`)
 
   const meshes = useMemo( () => traverse(nodes.Scene.children), [ nodes ] );
-//   meshes.callback = function() { console.log( meshes ); }
-//   meshes.callback()
 
   return (
 	<group {...props} dispose={null}>
@@ -56,9 +54,19 @@ export default function Tile(props) {
 
 // 11 physical tile models (tile0.glb through tile10.glb) get reused across
 // the 27 logical tile/rotation entries in tv3.js's tile_map.
-[...Array(11).keys()].forEach( i => useGLTF.preload(`assets/tile${i}.glb`) );
-useGLTF.preload('assets/empty.glb');
-useGLTF.preload('assets/flower.glb');
-useGLTF.preload('assets/tree.glb');
-useGLTF.preload('assets/grass.glb');
-useGLTF.preload('assets/house.glb');
+//
+// PUBLIC_URL (not a bare relative path) matters here: "homepage" in
+// package.json is an absolute URL, so CRA bakes the "/animal-crossing"
+// path into PUBLIC_URL even in development. A relative path like
+// "assets/tile0.glb" resolves against whatever URL happens to be in the
+// browser's address bar, which is almost never the same as where the dev
+// server actually serves the public/ folder from — it 404s, falls through
+// to the SPA history fallback, and useGLTF ends up trying to parse an HTML
+// page as a glTF file.
+const asset = name => `${process.env.PUBLIC_URL}/assets/${name}`;
+[...Array(11).keys()].forEach( i => useGLTF.preload(asset(`tile${i}.glb`)) );
+useGLTF.preload(asset('empty.glb'));
+useGLTF.preload(asset('flower.glb'));
+useGLTF.preload(asset('tree.glb'));
+useGLTF.preload(asset('grass.glb'));
+useGLTF.preload(asset('house.glb'));

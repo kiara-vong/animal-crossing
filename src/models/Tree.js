@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useGLTF } from '@react-three/drei'
 
 export default function useTree() {
-  const { nodes, materials } = useGLTF('assets/tree.glb')
+  const { nodes, materials } = useGLTF(`${process.env.PUBLIC_URL}/assets/tree.glb`)
 
   return useMemo( () => ({
     geometries: [ nodes.apples.geometry, nodes.bushes.geometry, nodes.leaves.geometry, nodes.trunk.geometry ] ,
@@ -11,4 +11,4 @@ export default function useTree() {
     }), [nodes, materials]);
 }
 
-useGLTF.preload('assets/tree.glb')
+useGLTF.preload(`${process.env.PUBLIC_URL}/assets/tree.glb`)

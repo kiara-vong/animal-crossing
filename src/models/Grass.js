@@ -2,14 +2,7 @@ import { useMemo } from 'react'
 import { useGLTF } from '@react-three/drei'
 
 export default function useGrass() {
-  const { nodes, materials } = useGLTF('assets/grass.glb')
-  const { nodes1, materials1 } = useGLTF('assets/flower.glb')
-
-//   return useMemo( () => ({
-// 	geometries: [ nodes.grass.geometry, nodes.grass001.geometry, nodes.grass002.geometry ] ,
-// 	materials: [ materials.grass,materials.grass,materials.grass ],
-//   }), [nodes, materials]);
-// }
+  const { nodes, materials } = useGLTF(`${process.env.PUBLIC_URL}/assets/grass.glb`)
 
 return useMemo( () => ({
 	geometries: [ ] ,
@@ -17,4 +10,4 @@ return useMemo( () => ({
   }), [nodes, materials]);
 }
 
-useGLTF.preload('assets/grass.glb')
+useGLTF.preload(`${process.env.PUBLIC_URL}/assets/grass.glb`)

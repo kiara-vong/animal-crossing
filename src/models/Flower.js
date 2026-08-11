@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useGLTF } from '@react-three/drei'
 
 export default function useFlower() {
-  const { nodes, materials } = useGLTF('assets/flower.glb')
+  const { nodes, materials } = useGLTF(`${process.env.PUBLIC_URL}/assets/flower.glb`)
 
   const geometries = useMemo( () => [ nodes.leaves.geometry, nodes.petal.geometry, nodes.stem.geometry ], [ nodes ]);
 
@@ -15,4 +15,4 @@ export default function useFlower() {
   };
 }
 
-useGLTF.preload('assets/flower.glb')
+useGLTF.preload(`${process.env.PUBLIC_URL}/assets/flower.glb`)
