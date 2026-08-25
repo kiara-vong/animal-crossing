@@ -2,7 +2,7 @@
 
 **[Live Demo →](https://kiara-vong.github.io/animal-crossing/)**
 
-A procedural 3D scene generator that builds an *Animal Crossing*-inspired island, tile by tile, using the **Wave Function Collapse** algorithm — the same class of technique used in games like *Bad North* and *Caves of Qud* to generate coherent worlds from a small set of hand-modeled pieces.
+A procedural 3D scene generator that builds an *Animal Crossing*-inspired island, tile by tile, using the **Wave Function Collapse** algorithm, the same class of technique used in games like *Bad North* and *Caves of Qud* to generate coherent worlds from a small set of hand-modeled pieces.
 
 ![Generated scene](screenshots/scene.png)
 
@@ -12,10 +12,10 @@ This started as an exploration of procedural generation and constraint-solving a
 
 ## How it works
 
-- The island is a grid of **triangular tiles** rather than squares — this cuts down the number of unique pieces needed to tile a surface seamlessly, at the cost of a trickier coordinate system (each tile has 3 possible rotations, not 4).
-- Each tile type declares which of its three edges can legally border which edges on neighboring tiles (**adjacency constraints**) — a coastline edge, for example, can only border another coastline edge or open water, never a cliff face.
-- The generator repeatedly picks the **cell with the fewest remaining valid options** first ("lowest entropy" — collapsing the most-constrained cells early avoids painting the algorithm into a contradiction later), locks in one of its options at random, then propagates that constraint outward to its neighbors, narrowing their options in turn.
-- Clicking any tile forces a specific type at that position and re-propagates from there — generation isn't purely automatic, it's steerable.
+- The island is a grid of **triangular tiles** rather than squares. This cuts down the number of unique pieces needed to tile a surface seamlessly, at the cost of a trickier coordinate system (each tile has 3 possible rotations, not 4).
+- Each tile type declares which of its three edges can legally border which edges on neighboring tiles (**adjacency constraints**): a coastline edge, for example, can only border another coastline edge or open water, never a cliff face.
+- The generator repeatedly picks the **cell with the fewest remaining valid options** first ("lowest entropy": collapsing the most-constrained cells early avoids painting the algorithm into a contradiction later), locks in one of its options at random, then propagates that constraint outward to its neighbors, narrowing their options in turn.
+- Clicking any tile forces a specific type at that position and re-propagates from there. Generation isn't purely automatic, it's steerable.
 
 ## Controls
 
@@ -28,7 +28,7 @@ This started as an exploration of procedural generation and constraint-solving a
 
 ## Tech stack
 
-- **React** + **react-three-fiber** (a React renderer for Three.js — lets the scene graph be declarative JSX instead of imperative Three.js calls)
+- **React** + **react-three-fiber** (a React renderer for Three.js, which lets the scene graph be declarative JSX instead of imperative Three.js calls)
 - **@react-three/drei** for camera controls, environment lighting, and glTF loading/preloading
 - **Three.js** for the underlying WebGL rendering
 - **Blender**, for modeling and exporting the tile set as `.glb`

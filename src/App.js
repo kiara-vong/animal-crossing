@@ -31,7 +31,7 @@ function intersection(a,b) {
 }
 
 // useProgress tracks THREE.DefaultLoadingManager, which every useGLTF/
-// Environment/texture load in the scene reports through — so this covers
+// Environment/texture load in the scene reports through so this covers
 // everything, not just one component's own assets. Rendered as a plain DOM
 // overlay (a sibling of <Canvas>, not inside it), so it can show up before
 // WebGL has drawn a single frame.
@@ -119,7 +119,7 @@ threeInstance.scene.traverse(function(obj){
 
   // Registered per-render (rather than once, with an empty dependency
   // array) so HandleClick always closes over the current `iteration` and
-  // `objects` — but without this cleanup, every re-render piled on another
+  // `objects` but without this cleanup, every re-render piled on another
   // listener, so a single click would place multiple tiles at once.
   useEffect(() => {
 	window.addEventListener('click', HandleClick);
@@ -334,7 +334,7 @@ function App({ props }) {
 		<OrbitControls autoRotate={autoRotate}/>
 		<directionalLight args={[0x0, 1.0]} castShadow position={[1,.6,0]}/>
 		<ambientLight args={[2]}/>
-		{/* Environment fetches its HDRI lighting map from a remote CDN — kept
+		{/* Environment fetches its HDRI lighting map from a remote CDN, kept
 		    in its own Suspense so that fetch (the slowest thing in the whole
 		    scene) doesn't hold up Sky/Clouds/Grid, which only need local,
 		    already-bundled assets and would otherwise render nothing at all

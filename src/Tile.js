@@ -60,7 +60,7 @@ export default function Tile(props) {
 // path into PUBLIC_URL even in development. A relative path like
 // "assets/tile0.glb" resolves against whatever URL happens to be in the
 // browser's address bar, which is almost never the same as where the dev
-// server actually serves the public/ folder from — it 404s, falls through
+// server actually serves the public/ folder from. It 404s, falls through
 // to the SPA history fallback, and useGLTF ends up trying to parse an HTML
 // page as a glTF file.
 const asset = name => `${process.env.PUBLIC_URL}/assets/${name}`;

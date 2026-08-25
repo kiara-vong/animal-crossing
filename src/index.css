@@ -5,7 +5,7 @@ body {
   /* The Canvas is sized to 100%/100% of a 100%-height chain (html, body,
      #root); if anything ever nudges its content a fraction of a pixel
      taller than the viewport, the page's default white background shows
-     through as a sliver along whichever edge overflows — most visibly a
+     through as a sliver along whichever edge overflows, most visibly a
      thin bar bottom-right, where vertical and horizontal overflow would
      both land. overflow: hidden above means that can only ever be an
      invisible 1px clip instead of a visible gap; this background is a
